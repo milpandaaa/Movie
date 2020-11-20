@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block style %}
+.dbl-border {
+list-style: none;
+margin: 0;
+}
+.dbl-border li {
+margin: 10px 0;
+position: relative;
+}
+.dbl-border a {
+width: 100%;
+color: #808285;
+text-decoration: none;
+border-left: 6px solid #ABC7EA;
+display: block;
+padding-left: 25px;
+height: 44px;
+line-height: 44px;
+font-size: 20px;
+position: relative;
+transition: 0.3s linear;
+}
+.dbl-border a:before {
+content: "";
+width: 6px;
+height: 70%;
+background: #EE997C;
+position: absolute;
+top: 15%;
+left: -12px;
+}
+.dbl-border li:before {
+content: "";
+width: 6px;
+height: 40%;
+background: #EFDD89;
+position: absolute;
+top: 30%;
+left: -12px;
+}
+.dbl-border a:hover {background: #D4D8D9;}
+{% endblock %}
+{% block content %}
+<div style="margin-left: 10%; margin-top: 10%; margin-right: 10%">
+    <ul class="dbl-border">
+        {% for seller in data_c %}
+  <li>На {{ seller.address }}<a href="{% url 'admissionAdd_url'  seller.id %}">Добавить фильм</a><a href="{% url 'sellerDelete_url' seller.id %}">Удалить</a></li>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}

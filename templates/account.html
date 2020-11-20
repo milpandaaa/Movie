@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block stile %}
+<style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.title {
+  color: grey;
+  font-size: 18px;
+}
+
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+   table {
+    border:25px solid white; /* Рамка вокруг таблицы */
+    margin: auto; /* Выравниваем таблицу по центру окна  */
+   }
+   th {
+    text-align: center; /* Выравниваем текст по центру ячейки */
+   }
+   td {
+    text-align: center; /* Выравниваем текст по центру ячейки */
+   }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div >
+  <h2 style="text-align:center">{{user.username}}</h2>
+</div>
+
+<h3 class="menu-wrap" >История заказов</h3>
+    <br>
+<p style="text-align:center">
+
+      {% for cassette in data_c %} {% for selling in data_sg %}
+      {% if user.id == selling.id_profile and cassette.id == selling.id_cassette%}
+
+              {{cassette.name}}
+             {{selling.date}}
+              {{selling.price}}
+                {% for seller in data_s %} {% if seller.id == selling.id_seller %}
+                        {{seller.address}}
+                {% endif %}{% endfor %}
+          {% endif %}
+      <br>{% endfor %}
+          <br>
+      {% endfor %}
+
+{#        {% for selling in data_sg %}#}
+{#            {% for seller in data_s %}#}
+{#                {% if cassette.id == admission.id_cassette %}#}
+{#                    {% if seller.id == admission.id_seller %}#}
+{#                        <p>{{seller.address}}</p>#}
+{#                    {% endif %} {% endif %}#}
+{#            {% endfor %}#}
+{#{% endfor %}#}
+
+</p>
+{% endblock %}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.3/css/bootstrap.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&amp;subset=cyrillic" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.4/css/all.css">
+
+    <style>
+    * {margin:0; padding:0;}
+
+     body {
+	background-color:#6DDCBD;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#FFF;
+     }
+
+     .menu-wrap {
+	background-color:#53bd84;
+	height:50px;
+	line-height:50px;
+	position:relative;
+	width:770px;
+	margin:auto;
+	margin-top:80px;
+     }
+
+     .menu-wrap ul {
+	list-style:none;
+     }
+
+     .menu-wrap ul li a {
+ 	float:left;
+	width:150px;
+	display:block;
+	text-align:center;
+	color:#FFF;
+	text-decoration:none;
+	text-transform:uppercase;
+     }
+
+     .menu-wrap ul li a:hover {
+	background-color:#666;
+	display:block;
+     }
+
+     .menu-wrap ul li:hover ul {
+	display:block;
+     }
+
+     .menu-wrap ul ul {
+	display:none;
+	list-style:none;
+	position:absolute;
+	background-color:#53bd84;
+	left:300px;
+	top:50px;
+	width:190px;
+     }
+
+     .menu-wrap ul ul li a {
+	float:none;
+	display:block;
+	padding-left:30px;
+	text-align:left;
+	width:160px;
+     }
+
+     .menu-wrap ul ul li a:hover {
+	color:#fff;
+      }
+
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+  align-items: start;
+  }
+.grid > article {
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
+}
+.grid > article img {
+  max-width: 100%;
+}
+.text {
+  padding: 0 20px 20px;
+}
+.text > button {
+  background: gray;
+  border: 0;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  }
+    {% block style%}
+    {% endblock%}
+     </style>
+    <title></title>
+</head>
+    <body>
+ <div class="menu-wrap" style="z-index: 25">
+	<ul>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'account_url' user.id%}">Личный кабинет</a></li>
+            <li><a  href="{% url 'logout' %}">Выход</a></li>
+        <li><a href="{% url 'base_url'%}">Все фильмы</a>
+            <ul>
+            {% for theme in data_t %}
+                <li><a href="{% url 'sort_url' theme.theme %}">{{ theme.theme }}</a></li>
+            {% endfor %}
+                {% if user.is_superuser %}
+                    <li><a  href="{% url 'cassetteAdd_url' %}">Добавить</a></li>
+                    <li><a href="{% url 'forDelete_url' %}">Удалить</a></li>
+                    {% endif %}
+			</ul>
+		</li>
+            {% if user.is_superuser %}
+            <li><a>Продавцы</a>
+            <ul>
+                    <li><a  href="{% url 'sellerAdd_url' %}">Добавить</a></li>
+                    <li><a href="{% url 'sellers_url' %}">Изменить</a></li>
+			</ul>
+		</li>
+                    {% endif %}
+            {% else %}
+            <li><a  href="{% url 'login' %}">Войти</a></li>
+    {% endif %}
+	</ul>
+
+  </div>
+
+
+        {% block content%}
+            <div class="menu-wrap">
+<main class="grid">
+{% for cassette in data_c %}
+  <article>
+    <img src="{{cassette.poster}}">
+    <div class="text">
+      <h3 >{{cassette.name}}</h3>
+      <p>{{cassette.year}}</p>
+        <p>{{cassette.theme}}</p>
+        <p>{{cassette.film_studio}}/{{cassette.producer}}</p>
+    <h4>Наличие в магазинах:</h4>
+        <p>{% for admission in data_a %}
+            {% for seller in data_s %}
+            {% if cassette.id == admission.id_cassette %}
+            {% if seller.id == admission.id_seller %}
+                    <p>{{seller.address}}</p>
+            {% endif %} {% endif %}
+        {% endfor %} {% endfor %}
+        </p>
+{% if user.is_authenticated %}
+        <button><a style="color: #e0e0e0" href="{% url 'selling_url' user.id cassette.id%}">Забронировать</a></button>
+    {% endif %}
+    </div>
+  </article>
+{% endfor %}
+</main>
+            </div>
+        {% endblock%}
+
+        </body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+ <div class="creditCardForm">
+ <div class="heading">
+ <h1>Добавление продавца</h1>
+     <div id="rectangle"></div>
+ </div>
+ <div class="payment">
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input value="{{ seller }}" name="id_seller" hidden>
+  <label >Название фильма</label>
+ <select name="id_cassette">
+     <option value="" disabled selected>Выберите фильм</option>
+     {% for cassete in data_c %}
+     <option value="{{ cassete.id }}" >{{ cassete.name }}</option>
+  {% endfor %}
+ </select>
+    <br>
+    <input type="submit" value="Создать" class="btn btn-outline-secondary" >
+</form>
+ </div>
+ </div>
+</div>
+</div>
+{% endblock %}
